@@ -1,0 +1,22 @@
+{
+  "name": "guillaume/live-php",
+  "description": "Live Studi php MVC",
+  "authors": [
+    {
+      "name": "Guillaume BERTIN",
+      "email": "80512116+Guibertinpro@users.noreply.github.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "scripts": {
+    "start": "php -S localhost:8000 -t public/ public/index.php"
+  },
+  "config": {
+    "process-timeout": 0
+  },
+  "require": {}
+}
