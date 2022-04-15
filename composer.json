@@ -18,5 +18,9 @@
   "config": {
     "process-timeout": 0
   },
-  "require": {}
+  "require": {
+    "doctrine/orm": "^2.11",
+    "symfony/cache": "^6.0",
+    "doctrine/annotations": "^1.13"
+  }
 }

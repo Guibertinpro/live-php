@@ -2,38 +2,20 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use App\Shop\AbstractProduct;
-use App\Shop\ProductCircle;
-use App\Shop\ProductRect;
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
 
-$productRect = new ProductRect("Plaque inox brossé", 24.4, 100, 150);
+$paths = ['src/Entity'];
+$isDevMode = true;
 
-var_dump($productRect);
+$dbParams = [
+  'driver'   => 'pdo_mysql',
+  'host'     => '127.0.0.1',
+  'port'     => '8889',
+  'user'     => 'root',
+  'password' => 'root',
+  'dbname'   => 'live-php',
+];
 
-$productCircle = new ProductCircle("Plaque inox brossé ronde", 25.4, 200);
-
-var_dump($productCircle);
-
-var_dump($productRect->getSurface());
-var_dump($productCircle->getSurface());
-
-
-/**
- * Undocumented function
- *
- * @param AbstractProduct[] $product
- * @return void
- */
-function listProducts (array $products)
-{
-  foreach ($products as $product) {
-    $product->display();
-  }
-}
-
-function displayProduct (AbstractProduct $product)
-{
-  echo $product->getName() . " - " . $product->getSurface() . "<br />";
-}
-
-listProducts([$productRect, $productCircle]);
+$config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
+$entityManager = EntityManager::create($dbParams, $config);
