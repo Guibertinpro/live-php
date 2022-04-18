@@ -2,35 +2,69 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use App\Entity\User;
+use App\Controller\IndexController;
+use App\Controller\UserController;
+use App\Routing\RouteNotFoundException;
+use App\Routing\Router;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Dotenv\Dotenv;
+
+$dotenv = new Dotenv();
+$dotenv->loadEnv(__DIR__.'/../.env');
 
 $paths = ['src/Entity'];
 $isDevMode = true;
 
 $dbParams = [
-  'driver'   => 'pdo_mysql',
-  'host'     => '127.0.0.1',
-  'port'     => '8889',
-  'user'     => 'root',
-  'password' => 'root',
-  'dbname'   => 'live-php',
+  'driver'   => $_ENV['DB_DRIVER'],
+  'host'     => $_ENV['DB_HOST'],
+  'port'     => $_ENV['DB_PORT'],
+  'user'     => $_ENV['DB_USER'],
+  'password' => $_ENV['DB_PASSWORD'],
+  'dbname'   => $_ENV['DB_NAME'],
 ];
 
 $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
 $entityManager = EntityManager::create($dbParams, $config);
 
-$user = new User();
+if (php_sapi_name() === 'cli') {
+  return;
+}
 
-$user->setName("BERTIN")
-  ->setFirstname("Guillaume")
-  ->setUsername("Bob sinclar")
-  ->setPassword(password_hash('test', PASSWORD_BCRYPT))
-  ->setEmail("bob@gmail.com")
-  ->setBirthDate(new DateTime('1991-07-18'));
+$router = new Router();
 
-  var_dump($user);
+// Enregistrer mes routes avec les controllers associés
+$router->addRoute(
+  'user_create',
+  '/live-php/public/user/create',
+  'GET',
+  UserController::class,
+  'create'
+);
+$router->addRoute(
+  'homepage',
+  '/live-php/public/',
+  'GET',
+  IndexController::class,
+  'home'
+);
+$router->addRoute(
+  'user_create',
+  '/live-php/public/contact',
+  'GET',
+  IndexController::class,
+  'contact'
+);
 
-  $entityManager->persist($user);
-  $entityManager->flush();
+// Transmettre au router la request URI pour détermine la route à exécuter
+$requestUri = $_SERVER['REQUEST_URI'];
+$requestMethod = $_SERVER['REQUEST_METHOD'];
+
+try{
+  $router->execute($requestUri, $requestMethod);
+} catch(RouteNotFoundException $e) {
+  http_response_code(404);
+  echo "<p>Page non trouvée</p>";
+  echo "<p>" . $e->getMessage() . "</p>";
+}
