@@ -9,10 +9,15 @@ use App\Routing\Router;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Dotenv\Dotenv;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
+// --- ENV VARS
 $dotenv = new Dotenv();
 $dotenv->loadEnv(__DIR__.'/../.env');
+// --- ENV VARS
 
+// --- DOCTRINE
 $paths = ['src/Entity'];
 $isDevMode = true;
 
@@ -27,6 +32,14 @@ $dbParams = [
 
 $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
 $entityManager = EntityManager::create($dbParams, $config);
+// --- DOCTRINE
+
+// --- TWIG
+$loader = new FilesystemLoader(__DIR__ . '/../templates');
+$twig = new Environment($loader, [
+  'cache' => __DIR__ . '/../var/cache/twig'
+]);
+// --- TWIG
 
 if (php_sapi_name() === 'cli') {
   return;
@@ -37,21 +50,21 @@ $router = new Router();
 // Enregistrer mes routes avec les controllers associés
 $router->addRoute(
   'user_create',
-  '/live-php/public/user/create',
+  '/user/create',
   'GET',
   UserController::class,
   'create'
 );
 $router->addRoute(
   'homepage',
-  '/live-php/public/',
+  '/',
   'GET',
   IndexController::class,
   'home'
 );
 $router->addRoute(
   'user_create',
-  '/live-php/public/contact',
+  '/contact',
   'GET',
   IndexController::class,
   'contact'

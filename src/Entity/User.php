@@ -76,7 +76,7 @@ class User {
     return $this->firstname;
   }
 
-   
+
   public function setFirstname($firstname)
   {
     $this->firstname = $firstname;
@@ -84,13 +84,13 @@ class User {
     return $this;
   }
 
- 
+
   public function getUsername()
   {
     return $this->username;
   }
 
- 
+
   public function setUsername($username)
   {
     $this->username = $username;
@@ -98,7 +98,7 @@ class User {
     return $this;
   }
 
-   
+
   public function getPassword()
   {
     return $this->password;
@@ -112,7 +112,7 @@ class User {
     return $this;
   }
 
-   
+
   public function getEmail()
   {
     return $this->email;
@@ -132,7 +132,7 @@ class User {
     return $this->birthDate;
   }
 
- 
+
   public function setBirthDate($birthDate)
   {
     $this->birthDate = $birthDate;
