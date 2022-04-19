@@ -32,7 +32,6 @@ class UserController
     // Récupérer tous les utilisateurs
     $users = $userRepository->findAll();
 
-
     // Transmettre la liste à la vue
     echo $twig->render('users/list.html.twig', ['users' => $users]);
   }

@@ -45,7 +45,7 @@ $twig = new Environment($loader, [
 // --- TWIG
 
 // --- REPOSITORIES
-$userRepository = new UserRepository($entityManager, new ClassMetadata(User::class));
+$userRepository = new UserRepository($entityManager);
 // --- REPOSITORIES
 
 if (php_sapi_name() === 'cli') {
@@ -54,7 +54,7 @@ if (php_sapi_name() === 'cli') {
 
 $router = new Router($entityManager, $twig, $userRepository);
 
-// Enregistrer mes routes avec les controllers associés
+// Enregistrer mes routes avec les controllers associés et leur méthode
 $router->addRoute(
   'user_create',
   '/user/create',
@@ -84,7 +84,7 @@ $router->addRoute(
   'list'
 );
 
-// Transmettre au router la request URI pour détermine la route à exécuter
+// Transmettre au router la request URI pour déterminer la route à exécuter
 $requestUri = $_SERVER['REQUEST_URI'];
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
