@@ -7,7 +7,7 @@ use DateTime;
 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="users")
  */
 

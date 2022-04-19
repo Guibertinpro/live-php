@@ -2,8 +2,10 @@
 
 namespace App\Routing;
 
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use ReflectionMethod;
+use Twig\Environment;
 
 class Router
 {
@@ -11,9 +13,15 @@ class Router
   private array $routes = [];
   private array $services = [];
 
-  public function __construct(EntityManager $entityManager)
+  public function __construct(
+    EntityManager $entityManager,
+    Environment $twig,
+    UserRepository $userRepository
+    )
   {
     $this->services[EntityManager::class] = $entityManager;
+    $this->services[Environment::class] = $twig;
+    $this->services[UserRepository::class] = $userRepository;
   }
 
   /**
@@ -93,7 +101,7 @@ class Router
       $paramType = $param->getType()->getName();
   
       if(array_key_exists($paramType, $this->services)) {
-        $param[$paramName] = $this->services[$paramType];
+        $params[$paramName] = $this->services[$paramType];
       }
     }
     
